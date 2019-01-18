@@ -1,0 +1,23 @@
+{
+    "name": "Neonate V5",
+    "short_name": "Neonate",
+    "start_url": ".",
+    "display": "fullscreen",
+    "background_color": "#fff",
+    "theme_color": "#fff",
+    "lang": "en-US",
+    "description": "An app for managing your character stats when playing Vampire: The Masquerade V5",
+    "icons": [{
+      "src": "/assets/logo96.png",
+      "sizes": "96x96",
+      "type": "image/png"
+    },{
+      "src": "/assets/logo192.png",
+      "sizes": "192x192",
+      "type": "image/png"
+    },{
+      "src": "/assets/logo512.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    }]
+  }
