@@ -1,6 +1,6 @@
 const CACHE_NAME = "neonate-v5";
 
-const urlsToCache = ["/"];
+const urlsToCache = [""];
 
 self.addEventListener("install", function(event) {
   event.waitUntil(
