@@ -1,4 +1,5 @@
 import React from "react";
+import PropTypes from "prop-types";
 
 import StatsContext from "context/stats";
 import IconBox from "components/iconbox";
@@ -27,7 +28,7 @@ class WillPower extends React.Component {
   }
 
   updateSuperficial(willpowerSuperficial) {
-    const { stats } = this.props;
+    const { stats, updateStats } = this.props;
     const { willpowerAggravated, willpowerMax } = stats;
 
     let newwillpowerAggravated = willpowerAggravated;
@@ -37,7 +38,7 @@ class WillPower extends React.Component {
       willpowerSuperficial -= 2;
     }
 
-    this.props.updateStats({
+    updateStats({
       ...stats,
       willpowerSuperficial,
       willpowerAggravated: newwillpowerAggravated
@@ -45,7 +46,20 @@ class WillPower extends React.Component {
   }
 
   updateaggravated(willpowerAggravated) {
-    this.props.updateStats({ ...this.props.stats, willpowerAggravated });
+    const { stats, updateStats } = this.props;
+    const { willpowerSuperficial, willpowerMax } = stats;
+
+    let newWillpowerSuperficial = willpowerSuperficial;
+
+    if (willpowerSuperficial + willpowerAggravated > willpowerMax) {
+      newWillpowerSuperficial = Math.max(0, willpowerSuperficial - 1);
+    }
+
+    updateStats({
+      ...stats,
+      willpowerAggravated,
+      willpowerSuperficial: newWillpowerSuperficial
+    });
   }
 
   render() {
@@ -161,6 +175,15 @@ const getwillpowerStatus = (
   } else if (willpowerMax <= willpowerSuperficial + willpowerAggravated) {
     return "Impaired";
   }
+};
+
+WillPower.propTypes = {
+  updateStats: PropTypes.func.isRequired,
+  stats: PropTypes.shape({
+    willpowerSuperficial: PropTypes.number.isRequired,
+    willpowerAggravated: PropTypes.number.isRequired,
+    willpowerMax: PropTypes.number.isRequired
+  }).isRequired
 };
 
 const WillpowerContext = () => (

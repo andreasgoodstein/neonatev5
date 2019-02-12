@@ -13,7 +13,9 @@ const initialStats = {
   hunger: 0,
 
   humanity: 7,
-  stains: 0
+  stains: 0,
+
+  isEditingMax: false
 };
 
 const getStats = () => {
