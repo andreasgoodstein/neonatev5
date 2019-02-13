@@ -1,6 +1,6 @@
 import React from "react";
+import PropTypes from "prop-types";
 
-import StatsContext from "context/stats";
 import IconBox from "components/iconbox";
 
 import HumanityIcon from "assets/humanity.png";
@@ -8,8 +8,6 @@ import StainIcon from "assets/moon.png";
 import DegredationIcon from "assets/conflict.png";
 import AddIcon from "assets/add.png";
 import RemoveIcon from "assets/remove.png";
-
-import "./humanity.less";
 
 const MAX_HUMANITY = 10;
 
@@ -20,24 +18,27 @@ export class Humanity extends React.Component {
     this.updateStains = this.updateStains.bind(this);
   }
 
-  shouldComponentUpdate(nextProps, nextState) {
+  shouldComponentUpdate(nextProps) {
     return (
-      nextProps.stats.humanity !== this.props.stats.humanity ||
+      nextProps.stats.humanityMax !== this.props.stats.humanityMax ||
       nextProps.stats.stains !== this.props.stats.stains
     );
   }
 
   updateStains(stains) {
-    this.props.updateStats({ ...this.props.stats, stains });
+    const { stats, updateStats } = this.props;
+
+    updateStats({ ...stats, stains });
   }
 
   render() {
     const { stats } = this.props || {};
-    const { humanity, stains } = stats || {};
+    const { humanityMax, stains } = stats || {};
+    const title = "HUMANITY";
 
     return (
       <div className="humanity column centered">
-        <p>HUMANITY</p>
+        <p>{title}</p>
 
         <div className="content row spaced">
           <button
@@ -48,8 +49,14 @@ export class Humanity extends React.Component {
             <IconBox icon={RemoveIcon} border={false} />
           </button>
 
-          <div className="icons row centered wrap">
-            {renderHumanityIcons(humanity, stains)}
+          <div className="column centered">
+            <div className="icons row centered wrap">
+              {renderHumanityIcons(humanityMax, stains)}
+            </div>
+
+            <div className="status">
+              <p>{getStatus(humanityMax, stains)}</p>
+            </div>
           </div>
 
           <button
@@ -67,13 +74,13 @@ export class Humanity extends React.Component {
   }
 }
 
-const renderHumanityIcons = (humanity, stains) => {
+const renderHumanityIcons = (humanityMax, stains) => {
   const icons = [];
 
   for (let n = 1; n <= MAX_HUMANITY; n += 1) {
     if (n + stains > MAX_HUMANITY) {
-      icons.push(getStainOrDegredationIcon(n, humanity));
-    } else if (n <= humanity) {
+      icons.push(getStainOrDegredationIcon(n, humanityMax));
+    } else if (n <= humanityMax) {
       icons.push(<IconBox key={n} icon={HumanityIcon} />);
     } else {
       icons.push(<IconBox key={n} />);
@@ -83,16 +90,26 @@ const renderHumanityIcons = (humanity, stains) => {
   return icons;
 };
 
-const getStainOrDegredationIcon = (count, humanity) => {
-  if (count > humanity) {
+const getStainOrDegredationIcon = (count, humanityMax) => {
+  if (count > humanityMax) {
     return <IconBox key={count} icon={StainIcon} />;
   } else {
     return <IconBox key={count} icon={DegredationIcon} />;
   }
 };
 
-export default () => (
-  <StatsContext.Consumer>
-    {context => <Humanity {...context} />}
-  </StatsContext.Consumer>
-);
+const getStatus = (humanityMax, stains) => {
+  if (stains > 10 - humanityMax) {
+    return "IMPAIRED";
+  }
+};
+
+Humanity.propTypes = {
+  stats: PropTypes.shape({
+    humanityMax: PropTypes.number.isRequired,
+    stains: PropTypes.number.isRequired
+  }).isRequired,
+  updateStats: PropTypes.func.isRequired
+};
+
+export default Humanity;

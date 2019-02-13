@@ -4,6 +4,7 @@ import Hunger from "components/hunger";
 import Humanity from "components/humanity";
 import Health from "components/health";
 import WillPower from "components/willpower";
+import EditMaxButton from "components/togglebutton/editMaxButton";
 
 import "./statspage.less";
 
@@ -22,9 +23,7 @@ const StatsPage = () => {
         <Hunger />
       </div>
 
-      <div className="toggle-max-button">
-        <button disabled>Change Max Values (next version)</button>
-      </div>
+      <EditMaxButton />
     </div>
   );
 };
