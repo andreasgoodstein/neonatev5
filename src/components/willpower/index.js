@@ -1,1 +1,1 @@
-export { default } from "./willpower";
+export { default } from "./willpowerhoc";

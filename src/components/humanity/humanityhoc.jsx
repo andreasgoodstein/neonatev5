@@ -4,31 +4,31 @@ import PropTypes from "prop-types";
 import StatsContext from "context/stats";
 
 import MaxValueHOC from "components/maxvalue";
-import HealthDisplayHOC from "components/health/healthdisplayhoc";
+import Humanity from "components/humanity/humanity";
 
-export const HealthHOC = ({ stats, updateStats }) => {
+export const HumanityHOC = ({ stats, updateStats }) => {
   const maxValueProps = {
     stats,
     updateStats,
-    valueKeyName: "health"
+    valueKeyName: "humanity"
   };
 
   return stats.isEditingMax ? (
     <MaxValueHOC {...maxValueProps} />
   ) : (
-    <HealthDisplayHOC stats={stats} updateStats={updateStats} />
+    <Humanity stats={stats} updateStats={updateStats} />
   );
 };
 
-HealthHOC.propTypes = {
+HumanityHOC.propTypes = {
   stats: PropTypes.object.isRequired,
   updateStats: PropTypes.func.isRequired
 };
 
-const HealthContext = () => (
+const HumanityContext = () => (
   <StatsContext.Consumer>
-    {context => <HealthHOC {...context} />}
+    {context => <HumanityHOC {...context} />}
   </StatsContext.Consumer>
 );
 
-export default HealthContext;
+export default HumanityContext;

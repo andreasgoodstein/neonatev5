@@ -1,1 +1,1 @@
-export { default } from "./humanity";
+export { default } from "./humanityhoc";

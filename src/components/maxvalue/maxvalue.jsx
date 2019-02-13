@@ -6,26 +6,28 @@ import IconBox from "components/iconbox";
 import AddIcon from "assets/add.png";
 import RemoveIcon from "assets/remove.png";
 
-const HealthMax = ({ healthMax, updateHealthMax }) => (
+const updateMaxValue = ({ title, maxValue, updateMaxValue }) => (
   <div className="column centered">
-    <p>HEALTH MAX</p>
+    <p>{title}</p>
 
     <div className="content row spaced">
       <button
         onClick={() => {
-          updateHealthMax(Math.max(1, healthMax - 1));
+          updateMaxValue(Math.max(1, maxValue - 1));
         }}
       >
         <IconBox icon={RemoveIcon} border={false} />
       </button>
 
       <div className="icons row centered">
-        <p>{healthMax}</p>
+        <p>
+          <b>{maxValue}</b>
+        </p>
       </div>
 
       <button
         onClick={() => {
-          updateHealthMax(Math.min(15, healthMax + 1));
+          updateMaxValue(Math.min(15, maxValue + 1));
         }}
       >
         <IconBox icon={AddIcon} border={false} />
@@ -34,9 +36,10 @@ const HealthMax = ({ healthMax, updateHealthMax }) => (
   </div>
 );
 
-HealthMax.propTypes = {
-  healthMax: PropTypes.number.isRequired,
-  updateHealthMax: PropTypes.func.isRequired
+updateMaxValue.propTypes = {
+  title: PropTypes.string.isRequired,
+  maxValue: PropTypes.number.isRequired,
+  updateMaxValue: PropTypes.func.isRequired
 };
 
-export default HealthMax;
+export default updateMaxValue;

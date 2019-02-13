@@ -4,31 +4,31 @@ import PropTypes from "prop-types";
 import StatsContext from "context/stats";
 
 import MaxValueHOC from "components/maxvalue";
-import HealthDisplayHOC from "components/health/healthdisplayhoc";
+import WillpowerDisplayHOC from "components/willpower/willpowerdisplayhoc";
 
-export const HealthHOC = ({ stats, updateStats }) => {
+export const WillpowerHOC = ({ stats, updateStats }) => {
   const maxValueProps = {
     stats,
     updateStats,
-    valueKeyName: "health"
+    valueKeyName: "willpower"
   };
 
   return stats.isEditingMax ? (
     <MaxValueHOC {...maxValueProps} />
   ) : (
-    <HealthDisplayHOC stats={stats} updateStats={updateStats} />
+    <WillpowerDisplayHOC stats={stats} updateStats={updateStats} />
   );
 };
 
-HealthHOC.propTypes = {
+WillpowerHOC.propTypes = {
   stats: PropTypes.object.isRequired,
   updateStats: PropTypes.func.isRequired
 };
 
-const HealthContext = () => (
+const WillpowerContext = () => (
   <StatsContext.Consumer>
-    {context => <HealthHOC {...context} />}
+    {context => <WillpowerHOC {...context} />}
   </StatsContext.Consumer>
 );
 
-export default HealthContext;
+export default WillpowerContext;

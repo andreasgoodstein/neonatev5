@@ -1,11 +1,16 @@
 import React from "react";
 import PropTypes from "prop-types";
 
-import StatsContext from "context/stats";
-
-import HealthDisplay from "components/health/healthdisplay";
+import DoubleValue from "components/doublevalue";
 
 class HealthDisplayHOC extends React.Component {
+  constructor(props) {
+    super(props);
+
+    this.updateSuperficial = this.updateSuperficial.bind(this);
+    this.updateAggravated = this.updateAggravated.bind(this);
+  }
+
   shouldComponentUpdate(nextProps) {
     return (
       nextProps.stats.healthSuperficial !==
@@ -37,11 +42,10 @@ class HealthDisplayHOC extends React.Component {
     const { stats, updateStats } = this.props;
     const { healthSuperficial, healthMax } = stats;
 
-    let newHealthSuperficial = healthSuperficial;
-
-    if (healthSuperficial + healthAggravated > healthMax) {
-      newHealthSuperficial = Math.max(0, healthSuperficial - 1);
-    }
+    const newHealthSuperficial =
+      healthSuperficial + healthAggravated > healthMax
+        ? Math.max(0, healthSuperficial - 1)
+        : healthSuperficial;
 
     updateStats({
       ...stats,
@@ -54,15 +58,17 @@ class HealthDisplayHOC extends React.Component {
     const { stats } = this.props;
     const { healthMax, healthSuperficial, healthAggravated } = stats;
 
-    const healthDisplayProps = {
-      healthMax,
-      healthSuperficial,
-      healthAggravated,
-      updateSuperficial: this.updateSuperficial.bind(this),
-      updateAggravated: this.updateAggravated.bind(this)
+    const doubleValueProps = {
+      updateSuperficial: this.updateSuperficial,
+      updateAggravated: this.updateAggravated,
+      valueSuperficial: healthSuperficial,
+      valueAggravated: healthAggravated,
+      valueMax: healthMax,
+      valueName: "HEALTH",
+      finalStatus: "TORPOR"
     };
 
-    return <HealthDisplay {...healthDisplayProps} />;
+    return <DoubleValue {...doubleValueProps} />;
   }
 }
 
@@ -75,10 +81,4 @@ HealthDisplayHOC.propTypes = {
   updateStats: PropTypes.func.isRequired
 };
 
-const HealthDisplayContext = () => (
-  <StatsContext.Consumer>
-    {context => <HealthDisplayHOC {...context} />}
-  </StatsContext.Consumer>
-);
-
-export default HealthDisplayContext;
+export default HealthDisplayHOC;

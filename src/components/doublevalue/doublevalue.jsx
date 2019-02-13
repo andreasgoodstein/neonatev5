@@ -11,16 +11,18 @@ import RemoveIcon from "assets/remove.png";
 const HealthDisplay = ({
   updateSuperficial,
   updateAggravated,
-  healthSuperficial,
-  healthAggravated,
-  healthMax
+  valueSuperficial,
+  valueAggravated,
+  valueMax,
+  valueName,
+  finalStatus
 }) => (
   <div className="humanity column centered">
     <div className="content row spaced">
       <div className="column around auto-width">
         <button
           onClick={() => {
-            updateSuperficial(Math.max(0, healthSuperficial - 1));
+            updateSuperficial(Math.max(0, valueSuperficial - 1));
           }}
         >
           <IconBox icon={RemoveIcon} border={false} />
@@ -29,7 +31,7 @@ const HealthDisplay = ({
 
         <button
           onClick={() => {
-            updateAggravated(Math.max(0, healthAggravated - 1));
+            updateAggravated(Math.max(0, valueAggravated - 1));
           }}
         >
           <IconBox icon={RemoveIcon} border={false} />
@@ -38,15 +40,20 @@ const HealthDisplay = ({
       </div>
 
       <div className="column centered">
-        <p>HEALTH</p>
+        <p>{valueName}</p>
 
         <div className="icons row centered wrap">
-          {renderHealthIcons(healthMax, healthSuperficial, healthAggravated)}
+          {renderIcons(valueMax, valueSuperficial, valueAggravated)}
         </div>
 
         <div className="status row centered">
           <p>
-            {getHealthStatus(healthMax, healthSuperficial, healthAggravated)}
+            {getStatus(
+              valueMax,
+              valueSuperficial,
+              valueAggravated,
+              finalStatus
+            )}
           </p>
         </div>
       </div>
@@ -54,7 +61,7 @@ const HealthDisplay = ({
       <div className="column around auto-width">
         <button
           onClick={() => {
-            updateSuperficial(Math.min(healthMax + 1, healthSuperficial + 1));
+            updateSuperficial(Math.min(valueMax + 1, valueSuperficial + 1));
           }}
         >
           <IconBox icon={AddIcon} border={false} />
@@ -63,7 +70,7 @@ const HealthDisplay = ({
 
         <button
           onClick={() => {
-            updateAggravated(Math.min(healthMax, healthAggravated + 1));
+            updateAggravated(Math.min(valueMax, valueAggravated + 1));
           }}
         >
           <IconBox icon={AddIcon} border={false} />
@@ -76,15 +83,15 @@ const HealthDisplay = ({
   </div>
 );
 
-const renderHealthIcons = (healthMax, healthSuperficial, healthAggravated) => {
+const renderIcons = (valueMax, valueSuperficial, valueAggravated) => {
   const icons = [];
 
-  for (let n = 1; n <= healthMax; n += 1) {
-    if (healthAggravated + n > healthMax) {
+  for (let n = 1; n <= valueMax; n += 1) {
+    if (valueAggravated + n > valueMax) {
       icons.push(<IconBox key={n} icon={AggravatedIcon} />);
-    } else if (healthSuperficial + n > healthMax) {
+    } else if (valueSuperficial + n > valueMax) {
       icons.push(<IconBox key={n} icon={SuperficialIcon} />);
-    } else if (healthSuperficial + healthAggravated + n > healthMax) {
+    } else if (valueSuperficial + valueAggravated + n > valueMax) {
       icons.push(<IconBox key={n} icon={SuperficialIcon} />);
     } else {
       icons.push(<IconBox key={n} />);
@@ -94,20 +101,27 @@ const renderHealthIcons = (healthMax, healthSuperficial, healthAggravated) => {
   return icons;
 };
 
-const getHealthStatus = (healthMax, healthSuperficial, healthAggravated) => {
-  if (healthMax <= healthAggravated) {
-    return "Torpor";
-  } else if (healthMax <= healthSuperficial + healthAggravated) {
-    return "Impaired";
+const getStatus = (
+  valueMax,
+  valueSuperficial,
+  valueAggravated,
+  finalStatus
+) => {
+  if (valueMax <= valueAggravated) {
+    return finalStatus;
+  } else if (valueMax <= valueSuperficial + valueAggravated) {
+    return "IMPAIRED";
   }
 };
 
 HealthDisplay.propTypes = {
   updateSuperficial: PropTypes.func.isRequired,
   updateAggravated: PropTypes.func.isRequired,
-  healthSuperficial: PropTypes.number.isRequired,
-  healthAggravated: PropTypes.number.isRequired,
-  healthMax: PropTypes.number.isRequired
+  valueSuperficial: PropTypes.number.isRequired,
+  valueAggravated: PropTypes.number.isRequired,
+  valueMax: PropTypes.number.isRequired,
+  valueName: PropTypes.string.isRequired,
+  finalStatus: PropTypes.string.isRequired
 };
 
 export default HealthDisplay;
